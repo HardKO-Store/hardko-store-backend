@@ -18,4 +18,9 @@ public class ProductOptions {
         this.sizes = sizes;
         this.colors = colors;
     }
+
+    public ProductOptions(String size, String color) {
+        this.sizes = List.of(size);
+        this.colors = List.of(color);
+    }
 }
