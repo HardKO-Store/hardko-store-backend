@@ -3,11 +3,10 @@ package pe.edu.upc.hardko.store.products.domain.model.aggregates;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import pe.edu.upc.hardko.store.products.domain.model.commands.CreateProductCommand;
 import pe.edu.upc.hardko.store.products.domain.model.entities.ProductOptions;
 import pe.edu.upc.hardko.store.shared.domain.model.entities.AuditableModel;
 
@@ -20,7 +19,7 @@ public class Product extends AuditableModel {
 
     @Id
     @NonNull
-    private ObjectId id;
+    private Long id;
 
     @NonNull
     private String name;
@@ -49,6 +48,21 @@ public class Product extends AuditableModel {
 
     public Product() {
 
+    }
+
+    public Product(CreateProductCommand command) {
+
+        this.name = command.name();
+        this.description = command.description();
+        this.categories =  List.of(command.category());
+        this.price = command.price();
+        this.brand = command.brand();
+        this.stock = command.stock();
+        this.images = List.of(command.image());
+        this.options = new ProductOptions(
+                command.size(),
+                command.color()
+        );
     }
 
 
