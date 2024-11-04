@@ -45,7 +45,7 @@ public class Product extends AuditableModel {
     @NonNull
     private ProductOptions options;
 
-    //TODO: implement review class and entity
+    //TODO: implement review class and entity with connection to users
 
     public Product() {
 
