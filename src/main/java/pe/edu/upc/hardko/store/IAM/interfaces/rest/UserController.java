@@ -72,7 +72,7 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Get all users", description = "Get all users registered")
-    public ResponseEntity<List<UserResource>> getAllusers(){
+    public ResponseEntity<List<UserResource>> getAllUsers(){
         var getAllUsersQuery = new GetAllUsersQuery();
 
         var users = this.userQueryService.handle(getAllUsersQuery);
