@@ -1,4 +1,4 @@
 package pe.edu.upc.hardko.store.products.domain.model.queries;
 
-public record GetProductsByCategory(String category) {
+public record GetAllCategoriesQuery() {
 }
