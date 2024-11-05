@@ -1,6 +1,7 @@
 package pe.edu.upc.hardko.store.IAM.application.internal.commandservices;
 
 import org.springframework.stereotype.Service;
+import pe.edu.upc.hardko.store.IAM.application.internal.outboundservices.acl.ExternalProductService;
 import pe.edu.upc.hardko.store.IAM.domain.model.aggregates.User;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.CreateUserCommand;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.DeleteUserCommand;
@@ -14,14 +15,15 @@ import java.util.Optional;
 public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserRepository userRepository;
+    private final ExternalProductService externalProductService;
 
-    public UserCommandServiceImpl(UserRepository userRepository) {
+    public UserCommandServiceImpl(UserRepository userRepository, ExternalProductService externalProductService) {
         this.userRepository = userRepository;
+        this.externalProductService = externalProductService;
     }
 
     @Override
     public Optional<User> handle(CreateUserCommand command) {
-
 
         if (this.userRepository.existsByEmail(command.email())) {
             throw new IllegalArgumentException("User with email " + command.email() + " already exists");
