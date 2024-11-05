@@ -1,5 +1,6 @@
 package pe.edu.upc.hardko.store.IAM.domain.model.aggregates;
 
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,8 +8,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.lang.NonNull;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.CreateUserCommand;
+import pe.edu.upc.hardko.store.IAM.domain.model.commands.UpdateUserCommand;
 import pe.edu.upc.hardko.store.IAM.domain.model.entities.UserAddress;
 import pe.edu.upc.hardko.store.shared.domain.model.entities.AuditableModel;
+
+import java.util.List;
 
 @Getter
 @Document(collection = "users")
@@ -25,6 +29,7 @@ public class User extends AuditableModel {
     private String lastName;
 
     @NonNull
+    @Email
     private String email;
 
     @NonNull
@@ -34,6 +39,8 @@ public class User extends AuditableModel {
     private UserAddress address;
 
     //TODO: implement user favorite products
+    @NonNull
+    private List<String> favoriteProducts;
 
     //TODO: implement order history
 
@@ -49,7 +56,35 @@ public class User extends AuditableModel {
                 command.street(),
                 command.zip()
         );
+        this.favoriteProducts = List.of();
     }
+
+    public User updateInformation(
+            String firstName,
+            String lastName,
+            String email,
+            String password,
+            String country,
+            String city,
+            String street,
+            String zip,
+            List<String> favoriteProducts
+    ){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.address = new UserAddress(
+                country,
+                city,
+                street,
+                zip
+        );
+        this.favoriteProducts = favoriteProducts;
+        return this;
+    }
+
+
 
 
 

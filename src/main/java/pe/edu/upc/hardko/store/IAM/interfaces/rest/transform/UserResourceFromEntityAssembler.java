@@ -11,7 +11,8 @@ public class UserResourceFromEntityAssembler {
                 entity.getLastName(),
                 entity.getEmail(),
                 entity.getPassword(),
-                UserAddressResourceFromEntityAssembler.toResourceFromEntity(entity.getAddress())
+                UserAddressResourceFromEntityAssembler.toResourceFromEntity(entity.getAddress()),
+                entity.getFavoriteProducts()
         );
     }
 }

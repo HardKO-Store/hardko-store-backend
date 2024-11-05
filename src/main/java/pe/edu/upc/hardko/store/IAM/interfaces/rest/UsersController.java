@@ -12,9 +12,11 @@ import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.CreateUserResource;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.LoginUserResource;
+import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.UpdateUserResource;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.UserResource;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.LoginUserCommandFromResourceAssembler;
+import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.UpdateUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.UserResourceFromEntityAssembler;
 
 import java.util.List;
@@ -89,7 +91,21 @@ public class UsersController {
 
     }
 
-    //TODO: Add product to user favorites products
+    @PutMapping("/{userId}")
+    @Operation(summary = "Update user", description = "Update a user by its id")
+    public ResponseEntity<UserResource> updateUser(@RequestBody UpdateUserResource resource, @PathVariable String userId){
+        var updateUserCommand = UpdateUserCommandFromResourceAssembler
+                .toCommandFromResource(resource, userId);
+
+        var user = this.userCommandService.handle(updateUserCommand);
+
+        if (user.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+        return ResponseEntity.ok(userResource);
+    }
 
     //TODO: Get user favorites products
 
