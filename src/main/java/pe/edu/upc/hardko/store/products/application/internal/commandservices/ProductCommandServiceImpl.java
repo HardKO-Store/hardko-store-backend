@@ -1,5 +1,6 @@
 package pe.edu.upc.hardko.store.products.application.internal.commandservices;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.hardko.store.products.domain.model.aggregates.Product;
 import pe.edu.upc.hardko.store.products.domain.model.commands.CreateProductCommand;
@@ -20,7 +21,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     }
 
     @Override
-    public Long handle(CreateProductCommand command) {
+    public String handle(CreateProductCommand command) {
 
         var product = new Product(command);
 

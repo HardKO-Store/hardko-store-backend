@@ -4,6 +4,7 @@ package pe.edu.upc.hardko.store.products.domain.model.aggregates;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.hardko.store.products.domain.model.commands.CreateProductCommand;
@@ -19,7 +20,7 @@ public class Product extends AuditableModel {
 
     @Id
     @NonNull
-    private Long id;
+    private String id;
 
     @NonNull
     private String name;
