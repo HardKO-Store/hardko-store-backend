@@ -1,6 +1,5 @@
 package pe.edu.upc.hardko.store.shared.infrastructure.documentation.openapi.configuration;
 
-
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfiguration {
     @Bean
-    public OpenAPI learningPlatformOpenApi() {
+    public OpenAPI HardKoStoreOpenApi() {
         // General configuration
         var openApi = new OpenAPI();
         openApi
