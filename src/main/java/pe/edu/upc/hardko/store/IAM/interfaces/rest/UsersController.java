@@ -24,12 +24,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/api/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Users", description = "Users Management Endpoints")
-public class UserController {
+public class UsersController {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
 
-    public UserController(UserCommandService userCommandService, UserQueryService userQueryService){
+    public UsersController(UserCommandService userCommandService, UserQueryService userQueryService){
         this.userCommandService = userCommandService;
         this.userQueryService = userQueryService;
     }
