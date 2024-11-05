@@ -10,8 +10,10 @@ import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.CreateUserResource;
+import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.LoginUserResource;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.UserResource;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
+import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.LoginUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.UserResourceFromEntityAssembler;
 
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
@@ -45,7 +47,25 @@ public class UserController {
         return ResponseEntity.ok(userResource);
     }
 
-    //TODO: User login
+
+    @PostMapping("/login")
+    @Operation(summary = "Login user", description = "Login of a user for the store")
+    public ResponseEntity<UserResource> loginUser(@RequestBody LoginUserResource resource){
+        var loginUserCommand = LoginUserCommandFromResourceAssembler
+                .toCommandFromResource(resource);
+
+        var user = this.userCommandService.handle(loginUserCommand);
+
+        if (user.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(user.get());
+
+        return ResponseEntity.ok(userResource);
+    }
+
+    //TODO: Get all users
 
     //TODO: Add product to user favorites products
 
