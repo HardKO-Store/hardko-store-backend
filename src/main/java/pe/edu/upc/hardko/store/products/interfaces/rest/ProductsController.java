@@ -1,19 +1,25 @@
 package pe.edu.upc.hardko.store.products.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.hardko.store.products.domain.model.commands.DeleteProductCommand;
+import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllCategoriesQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllProductsQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductByIdQuery;
+import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductsByCategoryQuery;
 import pe.edu.upc.hardko.store.products.domain.services.ProductCommandService;
 import pe.edu.upc.hardko.store.products.domain.services.ProductQueryService;
 import pe.edu.upc.hardko.store.products.interfaces.rest.resources.CreateProductResource;
+import pe.edu.upc.hardko.store.products.interfaces.rest.resources.ProductResource;
 import pe.edu.upc.hardko.store.products.interfaces.rest.resources.SimplifiedProductResource;
+import pe.edu.upc.hardko.store.products.interfaces.rest.resources.UpdateProductResource;
 import pe.edu.upc.hardko.store.products.interfaces.rest.transform.CreateProductCommandFromResourceAssembler;
+import pe.edu.upc.hardko.store.products.interfaces.rest.transform.ProductResourceFromEntityAssembler;
 import pe.edu.upc.hardko.store.products.interfaces.rest.transform.SimplifiedProductResourceFromEntityAssembler;
+import pe.edu.upc.hardko.store.products.interfaces.rest.transform.UpdateProductCommandFromResourceAssembler;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +27,7 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
 @RequestMapping(value = "/api/v1/products", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Profiles", description = "Profile Management Endpoints")
+@Tag(name = "Products", description = "Products Management Endpoints")
 public class ProductsController {
 
     private final ProductQueryService productQueryService;
@@ -45,10 +51,8 @@ public class ProductsController {
         return ResponseEntity.ok(productsResources);
     }
 
-    //TODO: Get all products (with Limit results)
-
     @GetMapping("/{productId}")
-    public ResponseEntity<SimplifiedProductResource> getProductById(@PathVariable String productId){
+    public ResponseEntity<ProductResource> getProductById(@PathVariable String productId){
         var getProductByIdQuery = new GetProductByIdQuery(productId);
 
         var product = this.productQueryService.handle(getProductByIdQuery);
@@ -57,14 +61,36 @@ public class ProductsController {
             return ResponseEntity.notFound().build();
         }
 
-        var productResource = SimplifiedProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
+        var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(product.get());
 
         return ResponseEntity.ok(productResource);
     }
 
-    //TODO: GetAllCategories
 
-    //TODO: GetProductsByCategory
+    @GetMapping("/categories")
+    public ResponseEntity<List<String>> getAllCategories(){
+        var getAllCategoriesQuery = new GetAllCategoriesQuery();
+
+        var categories = this.productQueryService.handle(getAllCategoriesQuery);
+
+
+        return ResponseEntity.ok(categories);
+    }
+
+
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<SimplifiedProductResource>> getProductsByCategory(@PathVariable String category){
+        var getProductsByCategory = new GetProductsByCategoryQuery(category);
+
+        var products = this.productQueryService.handle(getProductsByCategory);
+
+        var productsResources = products.stream()
+                .map(SimplifiedProductResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(productsResources);
+    }
+
 
     @PostMapping
     public ResponseEntity<SimplifiedProductResource> createProduct(@RequestBody CreateProductResource resource){
@@ -87,7 +113,32 @@ public class ProductsController {
     }
 
     //TODO: UpdateProduct
+    @PutMapping("/{productId}")
+    public ResponseEntity<ProductResource> updateProduct(@PathVariable String productId, @RequestBody UpdateProductResource resource){
+        var updateProductCommand = UpdateProductCommandFromResourceAssembler.toCommandFromResource(productId, resource);
 
-    //TODO: DeleteProduct
+
+        var optionalProduct = this.productCommandService.handle(updateProductCommand);
+        if (optionalProduct.isEmpty()){
+            return ResponseEntity.badRequest().build();
+        }
+
+        var productResource = ProductResourceFromEntityAssembler.toResourceFromEntity(optionalProduct.get());
+
+        return ResponseEntity.ok(productResource);
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteProductById(@PathVariable String productId){
+        var deleteProductCommand = new DeleteProductCommand(productId);
+
+        var isDeleted = this.productCommandService.handle(deleteProductCommand);
+
+        if (!isDeleted){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok("The product with the given id has been deleted");
+    }
 
 }

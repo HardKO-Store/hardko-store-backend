@@ -2,10 +2,10 @@ package pe.edu.upc.hardko.store.products.application.internal.queryservices;
 
 import org.springframework.stereotype.Service;
 import pe.edu.upc.hardko.store.products.domain.model.aggregates.Product;
-import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllCategories;
+import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllCategoriesQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllProductsQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductByIdQuery;
-import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductsByCategory;
+import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductsByCategoryQuery;
 import pe.edu.upc.hardko.store.products.domain.services.ProductQueryService;
 import pe.edu.upc.hardko.store.products.infrastructure.persistence.mongo.repositories.ProductRepository;
 
@@ -27,8 +27,8 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     }
 
     @Override
-    public List<Product> handle(GetProductsByCategory query) {
-        return List.of();
+    public List<Product> handle(GetProductsByCategoryQuery query) {
+        return this.productRepository.findByCategoriesContaining(query.category());
     }
 
     @Override
@@ -37,7 +37,9 @@ public class ProductQueryServiceImpl implements ProductQueryService {
     }
 
     @Override
-    public List<String> handle(GetAllCategories query) {
-        return List.of();
+    public List<String> handle(GetAllCategoriesQuery query) {
+        return this.productRepository.findDistinctCategories();
     }
+
+
 }
