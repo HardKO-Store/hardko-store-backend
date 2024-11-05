@@ -1,11 +1,13 @@
 package pe.edu.upc.hardko.store.products.domain.model.entities;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor
 public class ProductOptions {
 
     @NonNull

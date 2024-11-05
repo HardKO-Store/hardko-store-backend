@@ -1,6 +1,7 @@
 package pe.edu.upc.hardko.store.products.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.bson.types.ObjectId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class ProductsController {
     //TODO: Get all products (with Limit results)
 
     @GetMapping("/{productId}")
-    public ResponseEntity<SimplifiedProductResource> getProductById(@PathVariable Long productId){
+    public ResponseEntity<SimplifiedProductResource> getProductById(@PathVariable String productId){
         var getProductByIdQuery = new GetProductByIdQuery(productId);
 
         var product = this.productQueryService.handle(getProductByIdQuery);
@@ -72,7 +73,7 @@ public class ProductsController {
 
         var productId = this.productCommandService.handle(createProductCommand);
 
-        if (productId.equals(0L)){
+        if (productId.equals("")){
             return ResponseEntity.badRequest().build();
         }
 
