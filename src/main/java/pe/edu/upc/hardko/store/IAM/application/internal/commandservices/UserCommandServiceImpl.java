@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.hardko.store.IAM.domain.model.aggregates.User;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.CreateUserCommand;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.DeleteUserCommand;
+import pe.edu.upc.hardko.store.IAM.domain.model.commands.LoginUserCommand;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.infrastructure.persistence.mongo.repositories.UserRepository;
 
@@ -42,5 +43,14 @@ public class UserCommandServiceImpl implements UserCommandService {
         } catch (Exception e) {
             throw new IllegalArgumentException("Error while deleting user: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Optional<User> handle(LoginUserCommand command) {
+        if (!this.userRepository.existsByEmailAndPassword(command.email(),command.password())) {
+            throw new IllegalArgumentException("Login failed");
+        }
+
+        return this.userRepository.findByEmailAndPassword(command.email(),command.password());
     }
 }
