@@ -21,6 +21,12 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     @Override
     public Optional<User> handle(CreateUserCommand command) {
+
+
+        if (this.userRepository.existsByEmail(command.email())) {
+            throw new IllegalArgumentException("User with email " + command.email() + " already exists");
+        }
+
         var user = new User(command);
 
         try {
