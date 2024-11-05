@@ -1,17 +1,17 @@
 package pe.edu.upc.hardko.store.products.domain.services;
 
 import pe.edu.upc.hardko.store.products.domain.model.aggregates.Product;
-import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllCategories;
+import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllCategoriesQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetAllProductsQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductByIdQuery;
-import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductsByCategory;
+import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductsByCategoryQuery;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ProductQueryService {
     List<Product> handle(GetAllProductsQuery query);
-    List<Product> handle(GetProductsByCategory query);
+    List<Product> handle(GetProductsByCategoryQuery query);
     Optional<Product> handle(GetProductByIdQuery query);
-    List<String> handle(GetAllCategories query);
+    List<String> handle(GetAllCategoriesQuery query);
 }
