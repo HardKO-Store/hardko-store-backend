@@ -1,5 +1,6 @@
 package pe.edu.upc.hardko.store.products.interfaces.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -39,6 +40,7 @@ public class ProductsController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all products" , description = "Get all the existing products in the database")
     public ResponseEntity<List<SimplifiedProductResource>> getAllProducts(){
         var getAllProductsQuery = new GetAllProductsQuery();
 
@@ -52,6 +54,7 @@ public class ProductsController {
     }
 
     @GetMapping("/{productId}")
+    @Operation(summary = "Get product by id" , description = "Get the product with the given id")
     public ResponseEntity<ProductResource> getProductById(@PathVariable String productId){
         var getProductByIdQuery = new GetProductByIdQuery(productId);
 
@@ -68,6 +71,7 @@ public class ProductsController {
 
 
     @GetMapping("/categories")
+    @Operation(summary = "Get all categories" , description = "Get all the existing categories in the database")
     public ResponseEntity<List<String>> getAllCategories(){
         var getAllCategoriesQuery = new GetAllCategoriesQuery();
 
@@ -79,6 +83,7 @@ public class ProductsController {
 
 
     @GetMapping("/category/{category}")
+    @Operation(summary = "Get products by category" , description = "Get all the products with the given category")
     public ResponseEntity<List<SimplifiedProductResource>> getProductsByCategory(@PathVariable String category){
         var getProductsByCategory = new GetProductsByCategoryQuery(category);
 
@@ -93,6 +98,7 @@ public class ProductsController {
 
 
     @PostMapping
+    @Operation(summary = "Create product" , description = "Create a new product")
     public ResponseEntity<SimplifiedProductResource> createProduct(@RequestBody CreateProductResource resource){
         var createProductCommand = CreateProductCommandFromResourceAssembler
                 .toCommandFromResource(resource);
@@ -112,8 +118,9 @@ public class ProductsController {
         return new ResponseEntity<>(productResource, HttpStatus.CREATED);
     }
 
-    //TODO: UpdateProduct
+
     @PutMapping("/{productId}")
+    @Operation(summary = "Update product" , description = "Update the product with the given id")
     public ResponseEntity<ProductResource> updateProduct(@PathVariable String productId, @RequestBody UpdateProductResource resource){
         var updateProductCommand = UpdateProductCommandFromResourceAssembler.toCommandFromResource(productId, resource);
 
@@ -129,6 +136,7 @@ public class ProductsController {
     }
 
     @DeleteMapping("/{productId}")
+    @Operation(summary = "Delete product" , description = "Delete the product with the given id")
     public ResponseEntity<?> deleteProductById(@PathVariable String productId){
         var deleteProductCommand = new DeleteProductCommand(productId);
 
