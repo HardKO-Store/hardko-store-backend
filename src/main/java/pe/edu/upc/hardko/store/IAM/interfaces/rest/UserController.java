@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.DeleteUserCommand;
+import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetAllUsersQuery;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
@@ -15,6 +16,9 @@ import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.UserResource;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.LoginUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.UserResourceFromEntityAssembler;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
@@ -65,7 +69,25 @@ public class UserController {
         return ResponseEntity.ok(userResource);
     }
 
-    //TODO: Get all users
+
+    @GetMapping
+    @Operation(summary = "Get all users", description = "Get all users registered")
+    public ResponseEntity<List<UserResource>> getAllusers(){
+        var getAllUsersQuery = new GetAllUsersQuery();
+
+        var users = this.userQueryService.handle(getAllUsersQuery);
+
+        if (users.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        var userResources = users.stream()
+                .map(UserResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(userResources);
+
+    }
 
     //TODO: Add product to user favorites products
 
