@@ -3,9 +3,7 @@ package pe.edu.upc.hardko.store.products.domain.model.aggregates;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NonNull;
-import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
+import org.springframework.lang.NonNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.hardko.store.products.domain.model.commands.CreateProductCommand;
 import pe.edu.upc.hardko.store.products.domain.model.entities.ProductOptions;
@@ -17,10 +15,6 @@ import java.util.List;
 @Document(collection = "products")
 @AllArgsConstructor
 public class Product extends AuditableModel {
-
-    @Id
-    @NonNull
-    private String id;
 
     @NonNull
     private String name;
@@ -41,7 +35,7 @@ public class Product extends AuditableModel {
     private Integer stock;
 
     @NonNull
-    private List<String> images;
+    private String imageurl;
 
     @NonNull
     private ProductOptions options;
@@ -60,12 +54,34 @@ public class Product extends AuditableModel {
         this.price = command.price();
         this.brand = command.brand();
         this.stock = command.stock();
-        this.images = List.of(command.image());
+        this.imageurl = command.image();
         this.options = new ProductOptions(
                 command.size(),
                 command.color()
         );
     }
+
+    public Product updateInformation(
+            String name,
+            String description,
+            List<String> categories,
+            Double price,
+            String brand,
+            Integer stock,
+            String imageurl,
+            ProductOptions options
+    ){
+        this.name = name;
+        this.description = description;
+        this.categories = categories;
+        this.price = price;
+        this.brand = brand;
+        this.stock = stock;
+        this.imageurl = imageurl;
+        this.options = options;
+        return this;
+    }
+
 
 
 
