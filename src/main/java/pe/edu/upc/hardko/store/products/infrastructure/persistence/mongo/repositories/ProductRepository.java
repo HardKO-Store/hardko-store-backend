@@ -13,6 +13,7 @@ public interface ProductRepository extends MongoRepository<Product, String> {
 
     boolean existsById(String productId);
     List<Product> findByCategoriesContaining(String category);
+    List<Product> findByIdIn(List<String> productsIds);
 
     @Aggregation(pipeline = {
             "{ $unwind: '$categories' }",
