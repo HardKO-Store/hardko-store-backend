@@ -23,7 +23,6 @@ public class Product extends AuditableModel {
     private String description;
 
 
-    //TODO: refactor categories into value object
     @NonNull
     private List<String> categories;
 

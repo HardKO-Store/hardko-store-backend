@@ -97,7 +97,6 @@ public class ProductsController {
     }
 
 
-    //TODO: refactor post method and command service
     @PostMapping
     @Operation(summary = "Create product" , description = "Create a new product")
     public ResponseEntity<SimplifiedProductResource> createProduct(@RequestBody CreateProductResource resource){
