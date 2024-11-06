@@ -5,15 +5,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.hardko.store.IAM.application.internal.outboundservices.acl.ExternalProductService;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.DeleteUserCommand;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetAllUsersQuery;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserByIdQuery;
+import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserFavoriteProductsQuery;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
-import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.CreateUserResource;
-import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.LoginUserResource;
-import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.UpdateUserResource;
-import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.UserResource;
+import pe.edu.upc.hardko.store.IAM.interfaces.rest.resoruces.*;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.CreateUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.LoginUserCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.IAM.interfaces.rest.transform.UpdateUserCommandFromResourceAssembler;
@@ -30,10 +29,14 @@ public class UsersController {
 
     private final UserCommandService userCommandService;
     private final UserQueryService userQueryService;
+    private final ExternalProductService externalProductService;
 
-    public UsersController(UserCommandService userCommandService, UserQueryService userQueryService){
+    public UsersController(UserCommandService userCommandService,
+                           UserQueryService userQueryService,
+                           ExternalProductService externalProductService) {
         this.userCommandService = userCommandService;
         this.userQueryService = userQueryService;
+        this.externalProductService = externalProductService;
     }
 
 
@@ -107,7 +110,19 @@ public class UsersController {
         return ResponseEntity.ok(userResource);
     }
 
-    //TODO: Get user favorites products
+
+    @GetMapping("/{userId}/favorites")
+    @Operation(summary = "Get user favorite products", description = "Get the favorite products of a user with the list of ids a user has")
+    public ResponseEntity<List<FavoriteProductResource>> getUserFavoriteProducts(@PathVariable String userId){
+        var getUserFavoriteProductsQuery = new GetUserFavoriteProductsQuery(userId);
+        var FavoriteProductsIds = this.userQueryService.handle(getUserFavoriteProductsQuery);
+        if (FavoriteProductsIds.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        var favoriteProductsResources = this.externalProductService.fetchProductsByTheirIds(FavoriteProductsIds);
+
+        return ResponseEntity.ok(favoriteProductsResources);
+    }
 
 
     @PostMapping
