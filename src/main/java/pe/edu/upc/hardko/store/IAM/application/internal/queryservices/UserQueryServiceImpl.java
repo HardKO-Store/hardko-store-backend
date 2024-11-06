@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.hardko.store.IAM.domain.model.aggregates.User;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetAllUsersQuery;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserByIdQuery;
+import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserFavoriteProductsQuery;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
 import pe.edu.upc.hardko.store.IAM.infrastructure.persistence.mongo.repositories.UserRepository;
 
@@ -27,5 +28,16 @@ public class UserQueryServiceImpl implements UserQueryService {
     @Override
     public List<User> handle(GetAllUsersQuery query) {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public List<String> handle(GetUserFavoriteProductsQuery query) {
+        if(!this.userRepository.existsById(query.userId())){
+            throw new IllegalArgumentException("User not found");
+        }
+
+        var user = this.userRepository.findById(query.userId()).get();
+
+        return user.getFavoriteProducts();
     }
 }
