@@ -1,6 +1,7 @@
 package pe.edu.upc.hardko.store.IAM.interfaces.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ public class UsersController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "Get user by id", description = "Get a user by id")
+    @ApiResponse(responseCode = "200", description = "User found")
     public ResponseEntity<UserResource> getUserById(@PathVariable String userId){
         var getUserByIdQuery = new GetUserByIdQuery(userId);
 
@@ -59,6 +61,7 @@ public class UsersController {
 
     @PostMapping("/login")
     @Operation(summary = "Login user", description = "Login of a user for the store")
+    @ApiResponse(responseCode = "200", description = "User logged in")
     public ResponseEntity<UserResource> loginUser(@RequestBody LoginUserResource resource){
         var loginUserCommand = LoginUserCommandFromResourceAssembler
                 .toCommandFromResource(resource);
@@ -77,6 +80,7 @@ public class UsersController {
 
     @GetMapping
     @Operation(summary = "Get all users", description = "Get all users registered")
+    @ApiResponse(responseCode = "200", description = "Users found")
     public ResponseEntity<List<UserResource>> getAllUsers(){
         var getAllUsersQuery = new GetAllUsersQuery();
 
@@ -96,6 +100,7 @@ public class UsersController {
 
     @PutMapping("/{userId}")
     @Operation(summary = "Update user", description = "Update a user by its id")
+    @ApiResponse(responseCode = "200", description = "User updated")
     public ResponseEntity<UserResource> updateUser(@RequestBody UpdateUserResource resource, @PathVariable String userId){
         var updateUserCommand = UpdateUserCommandFromResourceAssembler
                 .toCommandFromResource(resource, userId);
@@ -113,6 +118,7 @@ public class UsersController {
 
     @GetMapping("/{userId}/favorites")
     @Operation(summary = "Get user favorite products", description = "Get the favorite products of a user with the list of ids a user has")
+    @ApiResponse(responseCode = "200", description = "Favorite products found")
     public ResponseEntity<List<FavoriteProductResource>> getUserFavoriteProducts(@PathVariable String userId){
         var getUserFavoriteProductsQuery = new GetUserFavoriteProductsQuery(userId);
         var FavoriteProductsIds = this.userQueryService.handle(getUserFavoriteProductsQuery);
@@ -127,6 +133,7 @@ public class UsersController {
 
     @PostMapping
     @Operation(summary = "Create user", description = "Create a new user")
+    @ApiResponse(responseCode = "200", description = "User created")
     public ResponseEntity<UserResource> createUser(@RequestBody CreateUserResource resource){
         var createUserCommand = CreateUserCommandFromResourceAssembler
                 .toCommandFromResource(resource);
@@ -141,6 +148,7 @@ public class UsersController {
 
     @DeleteMapping("/{userId}")
     @Operation(summary = "Delete user", description = "Delete a user by id")
+    @ApiResponse(responseCode = "200", description = "User deleted")
     public ResponseEntity<?> deleteUser(@PathVariable String userId){
 
         var deleteUserCommand = new DeleteUserCommand(userId);
