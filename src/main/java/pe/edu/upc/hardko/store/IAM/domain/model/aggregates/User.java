@@ -1,6 +1,7 @@
 package pe.edu.upc.hardko.store.IAM.domain.model.aggregates;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,30 +20,28 @@ import java.util.List;
 @AllArgsConstructor
 public class User extends AuditableModel {
 
-    @NonNull
+    @NotNull
     @Field("first_name")
     private String firstName;
 
-    @NonNull
+    @NotNull
     @Field("last_name")
     private String lastName;
 
-    @NonNull
+    @NotNull
     @Email
     private String email;
 
-    @NonNull
+    @NotNull
     private String password;
 
-    @NonNull
+    @NotNull
     private UserAddress address;
 
-
-    @NonNull
+    @NotNull
     private List<String> favoriteProducts;
 
     //TODO: implement order history
-
 
     public User(CreateUserCommand command) {
         this.firstName = command.firstName();
