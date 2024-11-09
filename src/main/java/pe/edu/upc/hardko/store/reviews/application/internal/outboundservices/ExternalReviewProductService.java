@@ -4,10 +4,10 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.hardko.store.products.interfaces.acl.ProductsContextFacade;
 
 @Service
-public class ExternalProductService {
+public class ExternalReviewProductService {
     private final ProductsContextFacade productsContextFacade;
 
-    public ExternalProductService(ProductsContextFacade productsContextFacade) {
+    public ExternalReviewProductService(ProductsContextFacade productsContextFacade) {
         this.productsContextFacade = productsContextFacade;
     }
 
