@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface ReviewCommandService {
     Optional<Review> handle(CreateReviewCommand command);
     void handle(DeleteReviewCommand command);
-    Boolean handle(AddLikeToReviewByIdCommand command);
+    void handle(AddLikeToReviewByIdCommand command);
 }
