@@ -61,7 +61,7 @@ public class UsersController {
 
     @PostMapping("/login")
     @Operation(summary = "Login user", description = "Login of a user for the store")
-    @ApiResponse(responseCode = "200", description = "User logged in")
+    @ApiResponse(responseCode = "201", description = "User logged in")
     public ResponseEntity<UserResource> loginUser(@RequestBody LoginUserResource resource){
         var loginUserCommand = LoginUserCommandFromResourceAssembler
                 .toCommandFromResource(resource);
@@ -100,7 +100,7 @@ public class UsersController {
 
     @PutMapping("/{userId}")
     @Operation(summary = "Update user", description = "Update a user by its id")
-    @ApiResponse(responseCode = "200", description = "User updated")
+    @ApiResponse(responseCode = "201", description = "User updated")
     public ResponseEntity<UserResource> updateUser(@RequestBody UpdateUserResource resource, @PathVariable String userId){
         var updateUserCommand = UpdateUserCommandFromResourceAssembler
                 .toCommandFromResource(resource, userId);
@@ -133,7 +133,7 @@ public class UsersController {
 
     @PostMapping
     @Operation(summary = "Create user", description = "Create a new user")
-    @ApiResponse(responseCode = "200", description = "User created")
+    @ApiResponse(responseCode = "201", description = "User created")
     public ResponseEntity<UserResource> createUser(@RequestBody CreateUserResource resource){
         var createUserCommand = CreateUserCommandFromResourceAssembler
                 .toCommandFromResource(resource);
