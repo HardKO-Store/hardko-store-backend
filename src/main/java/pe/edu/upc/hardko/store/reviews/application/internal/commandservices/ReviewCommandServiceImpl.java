@@ -7,7 +7,6 @@ import pe.edu.upc.hardko.store.reviews.domain.model.aggregates.Review;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByIdCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.CreateReviewCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.DeleteReviewCommand;
-import pe.edu.upc.hardko.store.reviews.domain.model.valueobjects.UserId;
 import pe.edu.upc.hardko.store.reviews.domain.services.ReviewCommandService;
 import pe.edu.upc.hardko.store.reviews.infrastructure.persistence.mongo.repositories.ReviewRepository;
 
@@ -68,7 +67,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
         }
 
         var review = this.reviewRepository.findById(command.reviewId()).get();
-        review.addLike(new UserId(command.userId()));
+        review.addLike(command.userId());
 
         try {
             this.reviewRepository.save(review);

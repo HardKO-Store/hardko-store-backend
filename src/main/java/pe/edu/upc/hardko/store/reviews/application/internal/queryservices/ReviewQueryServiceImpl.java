@@ -7,8 +7,6 @@ import pe.edu.upc.hardko.store.reviews.domain.model.aggregates.Review;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewByIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewsByProductIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewsByUserIdQuery;
-import pe.edu.upc.hardko.store.reviews.domain.model.valueobjects.ProductId;
-import pe.edu.upc.hardko.store.reviews.domain.model.valueobjects.UserId;
 import pe.edu.upc.hardko.store.reviews.domain.services.ReviewQueryService;
 import pe.edu.upc.hardko.store.reviews.infrastructure.persistence.mongo.repositories.ReviewRepository;
 
@@ -39,7 +37,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
             throw new IllegalArgumentException("Product not found");
         }
 
-        var reviews = this.reviewRepository.findReviewsByProductId(new ProductId(productId));
+        var reviews = this.reviewRepository.findReviewsByProductId(productId);
 
         return reviews;
     }
@@ -53,7 +51,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
             throw new IllegalArgumentException("User not found");
         }
 
-        var reviews = this.reviewRepository.findReviewsByUserId(new UserId(userId));
+        var reviews = this.reviewRepository.findReviewsByUserId(userId);
         return reviews;
     }
 
