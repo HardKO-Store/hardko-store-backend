@@ -9,12 +9,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.hardko.store.orders.domain.model.commands.CancelOrderByIdCommand;
 import pe.edu.upc.hardko.store.orders.domain.model.queries.GetOrderByIdQuery;
+import pe.edu.upc.hardko.store.orders.domain.model.queries.GetOrdersByProductIdQuery;
+import pe.edu.upc.hardko.store.orders.domain.model.queries.GetOrdersByUserIdQuery;
 import pe.edu.upc.hardko.store.orders.domain.services.OrderCommandService;
 import pe.edu.upc.hardko.store.orders.domain.services.OrderQueryService;
 import pe.edu.upc.hardko.store.orders.interfaces.rest.resources.CreateOrderResource;
 import pe.edu.upc.hardko.store.orders.interfaces.rest.resources.OrderResource;
 import pe.edu.upc.hardko.store.orders.interfaces.rest.transform.CreateOrderCommandFromResourceAssembler;
 import pe.edu.upc.hardko.store.orders.interfaces.rest.transform.OrderResourceFromEntityAssembler;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", methods = { RequestMethod.POST, RequestMethod.GET, RequestMethod.PUT, RequestMethod.DELETE })
 @RestController
@@ -77,5 +82,46 @@ public class OrdersController {
 
         return ResponseEntity.ok(orderResource);
     }
+
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get orders by user id", description = "Get orders by user id")
+    @ApiResponse(responseCode = "200", description = "Orders found")
+    public ResponseEntity<List<OrderResource>> getOrdersByUserId(@PathVariable String userId){
+
+        var getOrdersByUserIdQuery = new GetOrdersByUserIdQuery(userId);
+
+        var orders = this.orderQueryService.handle(getOrdersByUserIdQuery);
+
+        if (orders.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        var orderResources = orders.stream()
+                .map(OrderResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(orderResources);
+    }
+
+    @GetMapping("/product/{productId}")
+    @Operation(summary = "Get orders by product id", description = "Get orders by product id")
+    @ApiResponse(responseCode = "200", description = "Orders found")
+    public ResponseEntity<List<OrderResource>> getOrdersByProductId(@PathVariable String productId){
+
+        var getOrdersByProductIdQuery = new GetOrdersByProductIdQuery(productId);
+
+        var orders = this.orderQueryService.handle(getOrdersByProductIdQuery);
+
+        if (orders.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        var orderResources = orders.stream()
+                .map(OrderResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(orderResources);
+    }
+
 
 }
