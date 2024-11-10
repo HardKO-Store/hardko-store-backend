@@ -1,8 +1,8 @@
 package pe.edu.upc.hardko.store.IAM.interfaces.acl;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.hardko.store.IAM.domain.model.entities.UserAddress;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserByIdQuery;
+import pe.edu.upc.hardko.store.IAM.domain.model.valueobjects.UserAddress;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
 
