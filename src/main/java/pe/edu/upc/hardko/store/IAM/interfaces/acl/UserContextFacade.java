@@ -1,9 +1,13 @@
 package pe.edu.upc.hardko.store.IAM.interfaces.acl;
 
 import org.springframework.stereotype.Service;
+import pe.edu.upc.hardko.store.IAM.domain.model.entities.UserAddress;
 import pe.edu.upc.hardko.store.IAM.domain.model.queries.GetUserByIdQuery;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
+
+import javax.swing.text.html.Option;
+import java.util.Optional;
 
 @Service
 public class UserContextFacade {
@@ -22,6 +26,20 @@ public class UserContextFacade {
         var optionalUser = this.userQueryService.handle(getUserByIdQuery);
 
         return optionalUser.isPresent();
+    }
+
+    public Optional<UserAddress> GetUserAddressById(String userId) {
+        var getUserByIdQuery = new GetUserByIdQuery(userId);
+
+        var optionalUser = this.userQueryService.handle(getUserByIdQuery);
+
+        if (optionalUser.isEmpty()){
+            return Optional.empty();
+        }
+
+        var userAddress = optionalUser.get().getAddress();
+
+        return Optional.of(userAddress);
     }
 
 }
