@@ -8,12 +8,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByReviewIdAndUserIdCommand;
+import pe.edu.upc.hardko.store.reviews.domain.model.commands.RemoveLikeToReviewByReviewIdAndUserIdCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewByIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewsByProductIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewsByUserIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.services.ReviewCommandService;
 import pe.edu.upc.hardko.store.reviews.domain.services.ReviewQueryService;
-import pe.edu.upc.hardko.store.reviews.interfaces.rest.resources.AddLikeToReviewResource;
+import pe.edu.upc.hardko.store.reviews.interfaces.rest.resources.LikesResource;
+import pe.edu.upc.hardko.store.reviews.interfaces.rest.resources.ModifyLikeToReviewResource;
 import pe.edu.upc.hardko.store.reviews.interfaces.rest.resources.CreateReviewResource;
 import pe.edu.upc.hardko.store.reviews.interfaces.rest.resources.ReviewResource;
 import pe.edu.upc.hardko.store.reviews.interfaces.rest.transform.CreateReviewCommandFromResourceAssembler;
@@ -42,8 +44,6 @@ public class ReviewsController {
     @Operation(summary = "Get review by id", description = "Get a review by id")
     @ApiResponse(responseCode = "200", description = "Review found")
     public ResponseEntity<ReviewResource> getReviewById(@PathVariable String reviewId){
-        //TODO: implement personalized response for user, when a user
-        // is logged in, the response should include if the user liked the review
 
         var getReviewByIdQuery = new GetReviewByIdQuery(reviewId);
 
@@ -62,9 +62,6 @@ public class ReviewsController {
     @Operation(summary = "Get reviews by product id", description = "Get reviews by product id")
     @ApiResponse(responseCode = "200", description = "Reviews found")
     public ResponseEntity<List<ReviewResource>> getReviewsByProductId(@PathVariable String productId){
-
-        //TODO: implement personalized response for user, when a user
-        // is logged in, the response should include if the user liked the review
 
         var getReviewsByProductIdQuery = new GetReviewsByProductIdQuery(productId);
 
@@ -113,14 +110,30 @@ public class ReviewsController {
     @PutMapping("/{reviewId}/like")
     @Operation(summary = "Add like to review", description = "Add a like to a review")
     @ApiResponse(responseCode = "201", description = "Like added")
-    public ResponseEntity<Void> addLikeToReview(@PathVariable String reviewId, @RequestBody AddLikeToReviewResource resource){
+    public ResponseEntity<LikesResource> addLikeToReview(@PathVariable String reviewId, @RequestBody ModifyLikeToReviewResource resource){
         var addLikeToReviewByIdCommand = new AddLikeToReviewByReviewIdAndUserIdCommand(reviewId, resource.userId());
 
-        this.reviewCommandService.handle(addLikeToReviewByIdCommand);
+        var likes = this.reviewCommandService.handle(addLikeToReviewByIdCommand);
 
-        return ResponseEntity.ok().build();
+        var likesResource = new LikesResource(reviewId, likes.get());
+
+        return ResponseEntity.ok(likesResource);
     }
 
-    //TODO: implement unlike review endpoint
+
+    @PutMapping("/{reviewId}/unlike")
+    @Operation(summary = "Remove like to review", description = "Remove a like to a review")
+    @ApiResponse(responseCode = "201", description = "Like removed")
+    public ResponseEntity<?> removeLikeToReview(@PathVariable String reviewId, @RequestBody ModifyLikeToReviewResource resource){
+
+        var removeLikeToReviewByIdCommand = new RemoveLikeToReviewByReviewIdAndUserIdCommand(reviewId, resource.userId());
+
+        var likes = this.reviewCommandService.handle(removeLikeToReviewByIdCommand);
+
+        var likesResource = new LikesResource(reviewId, likes.get());
+
+        return ResponseEntity.ok(likesResource);
+    }
+
 
 }

@@ -7,6 +7,7 @@ import pe.edu.upc.hardko.store.reviews.domain.model.aggregates.Review;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByReviewIdAndUserIdCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.CreateReviewCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.DeleteReviewCommand;
+import pe.edu.upc.hardko.store.reviews.domain.model.commands.RemoveLikeToReviewByReviewIdAndUserIdCommand;
 import pe.edu.upc.hardko.store.reviews.domain.services.ReviewCommandService;
 import pe.edu.upc.hardko.store.reviews.infrastructure.persistence.mongo.repositories.ReviewRepository;
 
@@ -61,7 +62,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void handle(AddLikeToReviewByReviewIdAndUserIdCommand command) {
+    public Optional<Integer> handle(AddLikeToReviewByReviewIdAndUserIdCommand command) {
         if (!this.reviewRepository.existsById(command.reviewId())) {
             throw new IllegalArgumentException("Review with id " + command.reviewId() + " does not exist");
         }
@@ -75,5 +76,25 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
             throw new IllegalArgumentException("Error while saving review: " + e.getMessage());
         }
 
+        return Optional.of(review.getLikedBy().size());
+
+    }
+
+    @Override
+    public Optional<Integer> handle(RemoveLikeToReviewByReviewIdAndUserIdCommand command) {
+        if (!this.reviewRepository.existsById(command.reviewId())) {
+            throw new IllegalArgumentException("Review with id " + command.reviewId() + " does not exist");
+        }
+
+        var review = this.reviewRepository.findById(command.reviewId()).get();
+        review.removeLike(command.userId());
+
+        try {
+            this.reviewRepository.save(review);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error while saving review: " + e.getMessage());
+        }
+
+        return Optional.of(review.getLikedBy().size());
     }
 }

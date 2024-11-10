@@ -65,5 +65,9 @@ public class Review extends AuditableModel {
         }
     }
 
+    public void removeLike(String userId) {
+        likedBy.remove(userId);
+    }
+
 
 }
