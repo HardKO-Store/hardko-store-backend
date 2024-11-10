@@ -1,9 +1,9 @@
 package pe.edu.upc.hardko.store.products.domain.model.aggregates;
 
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.lang.NonNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 import pe.edu.upc.hardko.store.products.domain.model.commands.CreateProductCommand;
 import pe.edu.upc.hardko.store.products.domain.model.entities.ProductOptions;
@@ -16,32 +16,31 @@ import java.util.List;
 @AllArgsConstructor
 public class Product extends AuditableModel {
 
-    @NonNull
+    @NotNull
     private String name;
 
-    @NonNull
+    @NotNull
     private String description;
 
-
-    @NonNull
+    @NotNull
     private List<String> categories;
 
-    @NonNull
+    @NotNull
     private Double price;
 
-    @NonNull
+    @NotNull
     private String brand;
 
-    @NonNull
+    @NotNull
     private Integer stock;
 
-    @NonNull
+    @NotNull
     private String imageurl;
 
-    @NonNull
+    @NotNull
     private ProductOptions options;
 
-    //TODO: implement review class and entity with connection to users
+    //TODO: add origin of product
 
     public Product() {
 
