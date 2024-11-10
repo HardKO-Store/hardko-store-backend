@@ -1,22 +1,22 @@
 package pe.edu.upc.hardko.store.IAM.domain.model.entities;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.lang.NonNull;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserAddress {
 
-    @NonNull
+    @NotNull
     private String country;
-    @NonNull
+    @NotNull
     private String city;
-    @NonNull
+    @NotNull
     private String street;
-    @NonNull
+    @NotNull
     private String zip;
 
 
