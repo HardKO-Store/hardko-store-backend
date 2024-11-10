@@ -6,7 +6,6 @@ import pe.edu.upc.hardko.store.IAM.domain.model.valueobjects.UserAddress;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserCommandService;
 import pe.edu.upc.hardko.store.IAM.domain.services.UserQueryService;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
