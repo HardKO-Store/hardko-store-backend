@@ -1,7 +1,5 @@
 package pe.edu.upc.hardko.store.orders.domain.model.valueobjects;
 
-//TODO: change monse
-
 public record ProductItem(String productId, Integer quantity) {
     public ProductItem {
         if (productId == null || productId.isBlank()) {

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import pe.edu.upc.hardko.store.IAM.domain.model.commands.CreateUserCommand;
-import pe.edu.upc.hardko.store.IAM.domain.model.entities.UserAddress;
+import pe.edu.upc.hardko.store.IAM.domain.model.valueobjects.UserAddress;
 import pe.edu.upc.hardko.store.shared.domain.model.entities.AuditableModel;
 
 import java.util.List;
@@ -34,7 +34,6 @@ public class User extends AuditableModel {
     @NotNull
     private String password;
 
-    //TODO: refactor user address into a value object
     @NotNull
     private UserAddress address;
 

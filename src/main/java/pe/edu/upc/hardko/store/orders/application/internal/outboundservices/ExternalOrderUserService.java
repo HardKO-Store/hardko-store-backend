@@ -22,10 +22,10 @@ public class ExternalOrderUserService {
         var userAddress = this.userContextFacade.GetUserAddressById(userId).get();
 
         var deliveryAddress = new DeliveryAddress(
-                userAddress.getCountry(),
-                userAddress.getCity(),
-                userAddress.getStreet(),
-                userAddress.getZip()
+                userAddress.country(),
+                userAddress.city(),
+                userAddress.street(),
+                userAddress.zip()
         );
 
         return deliveryAddress;

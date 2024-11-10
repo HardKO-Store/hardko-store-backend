@@ -6,7 +6,7 @@ import pe.edu.upc.hardko.store.orders.interfaces.rest.resources.ProductItemResou
 public class ProductItemResourceFromEntityAssembler {
     public static ProductItemResource toResourceFromEntity(ProductItem entity){
         return new ProductItemResource(
-                entity.ProductId(),
+                entity.productId(),
                 entity.quantity()
         );
     }
