@@ -1,7 +1,6 @@
 package pe.edu.upc.hardko.store.products.interfaces.acl;
 
 import org.springframework.stereotype.Service;
-import pe.edu.upc.hardko.store.products.domain.model.aggregates.Product;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductByIdQuery;
 import pe.edu.upc.hardko.store.products.domain.model.queries.GetProductsByTheirIdsQuery;
 import pe.edu.upc.hardko.store.products.domain.services.ProductCommandService;
