@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import pe.edu.upc.hardko.store.reviews.application.internal.outboundservices.ExternalReviewProductService;
 import pe.edu.upc.hardko.store.reviews.application.internal.outboundservices.ExternalReviewUserService;
 import pe.edu.upc.hardko.store.reviews.domain.model.aggregates.Review;
-import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByIdCommand;
+import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByReviewIdAndUserIdCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.CreateReviewCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.commands.DeleteReviewCommand;
 import pe.edu.upc.hardko.store.reviews.domain.services.ReviewCommandService;
@@ -61,7 +61,7 @@ public class ReviewCommandServiceImpl implements ReviewCommandService {
     }
 
     @Override
-    public void handle(AddLikeToReviewByIdCommand command) {
+    public void handle(AddLikeToReviewByReviewIdAndUserIdCommand command) {
         if (!this.reviewRepository.existsById(command.reviewId())) {
             throw new IllegalArgumentException("Review with id " + command.reviewId() + " does not exist");
         }

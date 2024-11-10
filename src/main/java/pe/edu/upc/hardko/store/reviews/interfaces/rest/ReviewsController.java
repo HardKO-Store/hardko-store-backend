@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByIdCommand;
+import pe.edu.upc.hardko.store.reviews.domain.model.commands.AddLikeToReviewByReviewIdAndUserIdCommand;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewByIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewsByProductIdQuery;
 import pe.edu.upc.hardko.store.reviews.domain.model.queries.GetReviewsByUserIdQuery;
@@ -114,7 +114,7 @@ public class ReviewsController {
     @Operation(summary = "Add like to review", description = "Add a like to a review")
     @ApiResponse(responseCode = "201", description = "Like added")
     public ResponseEntity<Void> addLikeToReview(@PathVariable String reviewId, @RequestBody AddLikeToReviewResource resource){
-        var addLikeToReviewByIdCommand = new AddLikeToReviewByIdCommand(reviewId, resource.userId());
+        var addLikeToReviewByIdCommand = new AddLikeToReviewByReviewIdAndUserIdCommand(reviewId, resource.userId());
 
         this.reviewCommandService.handle(addLikeToReviewByIdCommand);
 
