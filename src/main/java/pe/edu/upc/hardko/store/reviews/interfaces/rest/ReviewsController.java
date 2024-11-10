@@ -3,6 +3,7 @@ package pe.edu.upc.hardko.store.reviews.interfaces.rest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -106,7 +107,7 @@ public class ReviewsController {
 
         var reviewResource = ReviewResourceFromEntityAssembler.toResourceFromEntity(review.get());
 
-        return ResponseEntity.ok(reviewResource);
+        return new ResponseEntity<>(reviewResource, HttpStatus.CREATED);
     }
 
     @PutMapping("/{reviewId}/like")
@@ -119,5 +120,7 @@ public class ReviewsController {
 
         return ResponseEntity.ok().build();
     }
+
+    //TODO: implement unlike review endpoint
 
 }
