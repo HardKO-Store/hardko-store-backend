@@ -40,7 +40,7 @@ public class OrderQueryServiceImpl implements OrderQueryService {
             throw new IllegalArgumentException("Product not found");
         }
 
-        return this.orderRepository.findOrdersByItemsContains(query.productId());
+        return this.orderRepository.findOrdersByProductId(query.productId());
     }
 
     @Override
