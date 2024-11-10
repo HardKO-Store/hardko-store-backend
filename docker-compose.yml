@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+  hardko-store:
+    build: hardko-store-backend2
+    mem_limit: 1g
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URI: mongodb://admin:admin@hardko_db:27017/hardkodev?authSource=admin
+    restart: always
+    depends_on:
+      hardko_db:
+        condition: service_healthy
+
+  hardko_db:
+    image: mongo:latest
+    container_name: hardko_db
+    mem_limit: 1g
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+      MONGO_INITDB_DATABASE: hardkodev
+    volumes:
+      - hardko_data:/data/db
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: "echo 'db.runCommand({ ping: 1 })' | mongo admin --quiet"
+      timeout: 10s
+      retries: 10
+    restart: always
+
+volumes:
+  hardko_data:
+
