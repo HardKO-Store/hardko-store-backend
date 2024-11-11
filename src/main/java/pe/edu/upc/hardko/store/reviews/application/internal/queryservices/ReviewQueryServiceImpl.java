@@ -47,7 +47,7 @@ public class ReviewQueryServiceImpl implements ReviewQueryService {
 
         var userId = query.userId();
 
-        if(!this.externalProductService.existsByProductId(userId)){
+        if(!this.externalUserService.existsByUserId(userId)){
             throw new IllegalArgumentException("User not found");
         }
 
